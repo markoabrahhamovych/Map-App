@@ -103,7 +103,7 @@ const Dashboard: FC = observer(() => {
         setPositions(list);
         modifyStoreList({ list: positions || [] });
         setMissingItemsToStore({ list: [] });
-      }, 60000);
+      }, 300000);
     }
   }, [mapStore.lostItems]);
 
