@@ -1,4 +1,6 @@
-export const moveObject = (pos) => {
+import { MapPointsInterface } from "../../interfaces";
+
+export const moveObject = (pos: MapPointsInterface) => {
   const speed = 0.0005;
   switch (pos.direction) {
     case "north":

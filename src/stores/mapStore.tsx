@@ -1,9 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import { fetchMapItems, fetchMapItemsWithLost } from "../api/mapRequests.ts";
+import { MapPointsInterface } from "../interfaces";
 
 class MapStore {
-  items: [] = [];
-  lostItems: [] = [];
+  items: MapPointsInterface[] = [];
+  lostItems: MapPointsInterface[] = [];
   loading: boolean = false;
   error: null | string = null;
 
@@ -37,11 +38,11 @@ class MapStore {
     this.loading = false;
   }
 
-  setListItems(data) {
+  setListItems(data: MapPointsInterface[]) {
     this.items = data;
   }
 
-  setLostItems(data) {
+  setLostItems(data: MapPointsInterface[]) {
     this.lostItems = data;
   }
 }

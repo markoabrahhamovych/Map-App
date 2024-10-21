@@ -32,11 +32,10 @@ const MapBlock: FC<{ children: ReactNode }> = ({ children }) => {
   );
 };
 
-const MapComponent: FC<{ pointsList: MapPointsInterface[] }> = ({
-  pointsList = [],
-  MarkersComponent = MarkersList,
-}) => {
-  const mapPointsContainer = <MarkersComponent list={pointsList} />;
+const MapComponent: FC<{
+  pointsList: MapPointsInterface[];
+}> = ({ pointsList = [] }) => {
+  const mapPointsContainer = <MarkersList list={pointsList} />;
   const tileContainer = (
     <TileLayer
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -27,13 +27,11 @@ const LoginFormContainer: FC<{ children?: ReactNode }> = ({ children }) => {
   );
 };
 
-const Login: FC<{
-  ContainerComponent?: ReactNode;
-}> = observer(({ ContainerComponent = LoginFormContainer }) => {
+const Login: FC = observer(() => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await authStore.login(username, password);
   };
@@ -91,7 +89,7 @@ const Login: FC<{
   );
 
   return (
-    <ContainerComponent>
+    <LoginFormContainer>
       <Box
         display="flex"
         flexDirection="column"
@@ -105,7 +103,7 @@ const Login: FC<{
       >
         {formContainer}
       </Box>
-    </ContainerComponent>
+    </LoginFormContainer>
   );
 });
 

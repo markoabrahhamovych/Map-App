@@ -8,7 +8,7 @@ import { MapComponent, SideBar } from "../../components";
 import { moveObject } from "./utils.ts";
 
 const Dashboard: FC = observer(() => {
-  const [positions, setPositions] = useState<MapPointsInterface[]>([]);
+  const [positions, setPositions] = useState<MapPointsInterface[] | []>([]);
 
   const onTrackDirections = () => {
     return setInterval(() => {
@@ -18,29 +18,51 @@ const Dashboard: FC = observer(() => {
     }, 3000);
   };
 
-  const getListWithMissingItems = ({ storeList = [], stateList = [] }) => {
+  const getListWithMissingItems = ({
+    storeList = [],
+    stateList = [],
+  }: {
+    storeList: MapPointsInterface[] | [];
+    stateList: MapPointsInterface[] | [];
+  }) => {
     const missingItems = (stateList || []).filter(
-      (item) =>
-        !(storeList || []).some((updatedItem) => updatedItem.id === item.id),
+      (item: MapPointsInterface) =>
+        !(storeList || []).some(
+          (updatedItem: MapPointsInterface) => updatedItem?.id === item?.id,
+        ),
     );
     return missingItems;
   };
 
-  const setMissingItemsToStore = ({ list = [] }) => {
+  const setMissingItemsToStore = ({
+    list = [],
+  }: {
+    list: MapPointsInterface[];
+  }) => {
     mapStore.setLostItems(list);
   };
 
-  const modifyStoreList = ({ list = [] }) => {
+  const modifyStoreList = ({
+    list = [],
+  }: {
+    list: MapPointsInterface[] | [];
+  }) => {
     mapStore.setListItems(list);
   };
 
-  const onUpdateItemsStatuses = ({ list = [] }) => {
+  const onUpdateItemsStatuses = ({
+    list = [],
+  }: {
+    list: MapPointsInterface[] | [];
+  }) => {
     const updateStatuses = (positions || []).map((item) =>
-      (list || []).some((missingItem) => missingItem.id === item.id)
+      (list || []).some(
+        (missingItem: MapPointsInterface) => missingItem.id === item.id,
+      )
         ? { ...item, status: "In active" }
         : item,
     );
-    setPositions(updateStatuses);
+    setPositions(updateStatuses || []);
   };
 
   const fetchPositions = async () => {
@@ -49,13 +71,13 @@ const Dashboard: FC = observer(() => {
 
   const initListFnc = () => {
     const lostItemsList = getListWithMissingItems({
-      storeList: mapStore.items || [],
+      storeList: mapStore.items,
       stateList: positions,
     });
 
-    setMissingItemsToStore({ list: lostItemsList });
-    onUpdateItemsStatuses({ list: lostItemsList });
-    modifyStoreList({ list: positions });
+    setMissingItemsToStore({ list: lostItemsList || [] });
+    onUpdateItemsStatuses({ list: lostItemsList || [] });
+    modifyStoreList({ list: positions || [] });
   };
 
   useEffect(() => {
@@ -79,7 +101,7 @@ const Dashboard: FC = observer(() => {
 
       setTimeout(() => {
         setPositions(list);
-        modifyStoreList({ list: positions });
+        modifyStoreList({ list: positions || [] });
         setMissingItemsToStore({ list: [] });
       }, 60000);
     }

@@ -26,7 +26,7 @@ class AuthStore {
     localStorage.removeItem("refreshToken");
   }
 
-  signIn(data) {
+  signIn(data: { accessToken: string; refreshToken: string }) {
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("refreshToken", data.refreshToken);
     this.isAuthenticated = true;
@@ -55,7 +55,7 @@ class AuthStore {
       });
   }
 
-  async refresh(token) {
+  async refresh(token: string) {
     this.loading = true;
     await onRefreshToken({ token })
       .then((res) => res.json())
@@ -76,14 +76,14 @@ class AuthStore {
   async fetchCurrentUser() {
     this.loading = true;
 
-    const accessToken: string = localStorage.getItem("accessToken");
-    const refreshToken = localStorage.getItem("refreshToken");
+    const accessToken: string = localStorage.getItem("accessToken") || "";
+    const refreshToken: string = localStorage.getItem("refreshToken") || "";
 
     await getUser({ token: accessToken })
       .then((res) => res.json())
       .then((data) => {
         if (data.message === "Invalid/Expired Token!") {
-          this.refresh(refreshToken);
+          if (refreshToken) this.refresh(refreshToken);
         }
 
         this.loading = false;
